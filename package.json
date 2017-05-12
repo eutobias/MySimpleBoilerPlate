@@ -1,0 +1,12 @@
+{
+  "name": "boilerplate-webpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tobias Taurian Viana <eutobias@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "path": "^0.12.7",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}
