@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const autoprefixer = require("autoprefixer");
 
 module.exports = {
   entry: {
@@ -15,32 +16,32 @@ module.exports = {
     libraryTarget: 'umd'
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.jsx$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.json$/,
-      loader: 'json-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.scss$/,
-      loaders: ExtractTextPlugin.extract({
-        fallback: "style-loader",
-        use: "css-loader!sass-loader"
-      })
-    }]
+    rules: [
+      {
+        test: /\.js|\.jsx$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.json$/,
+        use: 'json-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loaders: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader!sass-loader"
+        })
+      }
+    ]
   },
   resolve: {
     extensions: ['.js', '.jsx', '.scss', '.json']
   },
   plugins: [
-    // new UglifyJSPlugin(),
     new ExtractTextPlugin("styles.css"),
+    // new UglifyJSPlugin(),
     new StaticSiteGeneratorPlugin('main', '/', {}),
     new BrowserSyncPlugin({
       host: 'localhost',

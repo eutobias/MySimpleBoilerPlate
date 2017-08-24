@@ -1,7 +1,9 @@
 import React from 'react'
+import App from './App'
 
 export default class Template extends React.Component {
   render() {
+    
     return (
       <html>
         <head>
