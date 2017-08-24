@@ -1,8 +1,15 @@
-/*
-    ./client/index.js
-*/
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/App';
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Template from './components/Template'
+import App from './components/App'
+
+export default function (locals, callback) {
+
+    const html = ReactDOMServer.renderToStaticMarkup(
+        <Template>
+            <App />
+        </Template>
+        , locals.assets)
+    callback(null, html)
+}

@@ -1,20 +1,18 @@
 const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
-const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './src/index.html',
-  filename: 'index.html',
-  inject: 'body'
-})
+const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    main: './src/index.js'
+  },
   output: {
     path: path.resolve('./dist'),
-    filename: 'index_bundle.js'
+    filename: 'index_bundle.js',
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [{
@@ -26,19 +24,28 @@ module.exports = {
       loader: 'babel-loader',
       exclude: /node_modules/
     }, {
+      test: /\.json$/,
+      loader: 'json-loader',
+      exclude: /node_modules/
+    }, {
       test: /\.scss$/,
       loaders: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader!sass-loader"
-        })
+        fallback: "style-loader",
+        use: "css-loader!sass-loader"
+      })
     }]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss']
+    extensions: ['.js', '.jsx', '.scss', '.json']
   },
   plugins: [
-    HtmlWebpackPluginConfig,
-    new UglifyJSPlugin(),
-    new ExtractTextPlugin("styles.css")
+    // new UglifyJSPlugin(),
+    new ExtractTextPlugin("styles.css"),
+    new StaticSiteGeneratorPlugin('main', '/', {}),
+    new BrowserSyncPlugin({
+      host: 'localhost',
+      port: 8080,
+      server: { baseDir: ['dist'] }
+    })
   ]
 };
